@@ -1,0 +1,83 @@
+<!-- Card 1, Back -->
+
+<div class="box rev"></div>
+<div id="front">{{Front}}</div>
+<div class="ex">{{Extra}}</div>
+<div class="com">{{Comment}}</div>
+<br>
+<div id="back">
+{{Back}}
+</div>
+<br><br><audio id = "audio" src="" autoplay></audio>
+{{#Tags}}<div id="tags">{{Tags}}</div>{{/Tags}}
+<div id="btns">
+<btn target="audio"src="https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q="><b0>🔈</b0></btn>
+<btn target="iframe"src="https://www.merriam-webster.com/dictionary/"><b0>Merriam-Webster</b0><b1>🌐</b1></btn>
+<btn target="iframe"src="https://wooordhunt.ru/word/"><b0>Wooordhunt</b0><b1>🌐</b1></btn>
+<btn target="iframe"src="https://www.bing.com/images/search?q="><b0>Bing images</b0><b1>🌐</b1></btn>
+<btn target="iframe"src="https://context.reverso.net/translation/english-russian/"><b0>Reverso-Context</b0><b1>🌐</b1></btn>
+</div>
+<info></info><log></log>
+<br><br><iframe></iframe>
+
+<script> //logger
+var baseLogFunction=console.log;function createLogNode(o){var e=document.createElement("div"),n=document.createTextNode(o);return e.appendChild(n),e}console.log=function(){baseLogFunction.apply(console,arguments);for(var o=Array.prototype.slice.call(arguments),e=0;e<o.length;e++){var n=createLogNode(o[e]);document.querySelector("log").appendChild(n)}},window.onerror=function(o,e,n){console.log("JavaScript error: "+o+" on line "+n+" for "+e)};
+
+var UA = navigator.userAgent;
+var isMobile = /Android/i.test(UA);
+var isAndroidWebview = /wv/i.test(UA)
+if (isMobile && isAndroidWebview) {
+s = 'Interval: ' + AnkiDroidJS.ankiGetCardInterval() + 'd; '
+s += 'Ease: ' +   AnkiDroidJS.ankiGetCardFactor()/10 + '%; '
+s += 'Reviews: ' +     AnkiDroidJS.ankiGetCardReps() + '; '
+s += 'Lapses: ' +   AnkiDroidJS.ankiGetCardLapses() + '; '
+document.querySelector('info').innerHTML += s
+}
+
+
+
+
+
+//tags
+tags = document.querySelector("#tags")
+if (tags){
+  parts = []
+  tags.innerHTML.split(' ').forEach(el => {
+    parts.push(`<span>${el}</span>`)
+  })
+  tags.innerHTML = parts.join('')
+}
+
+//replacing tags <u> with <x>
+html = document.querySelector(".ex").innerHTML
+if (html) document.querySelector(".ex").innerHTML = html.replace(/u>/g, 'x>')
+
+//buttons
+let selText = ''
+document.querySelectorAll("btn").forEach(el=>{
+  el.querySelector("b0").setAttribute('title', 'Open here')
+  el.querySelector("b0").addEventListener('click', ()=>{
+    link = el.getAttribute("src") + (selText || "{{Front}}")
+    target = document.querySelector(el.getAttribute("target"))
+    target.src = link
+  })
+  if (!el.querySelector("b1")) return
+  el.querySelector("b1").setAttribute('title', 'Open in the browser')
+  el.querySelector("b1").addEventListener('click', ()=>{
+    link = el.getAttribute("src") + (selText || "{{Front}}")
+    target = document.querySelector(el.getAttribute("target"))
+    target.src = ''
+    window.location.assign(link);
+  })
+})
+//selection
+document.addEventListener('selectionchange', () => {
+  sel = document.getSelection().toString()
+  selText = sel || selText
+  if (!sel && selText)
+    for (s of ['.ex', '#back', '#front'])
+      document.querySelector(s).innerHTML = document.querySelector(s).innerHTML
+        .replace(/<\/?sel>/g, '')
+        .replace(new RegExp(`${selText}`, 'ig'), `<sel>$&</sel>`)
+})
+</script>

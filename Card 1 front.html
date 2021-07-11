@@ -1,0 +1,78 @@
+<!-- Card 1, Front -->
+
+<!-- Add Reverse-->
+<div class="box"></div>
+<tts service="android" voice="en_EN">
+{{Front}}
+</tts>
+<div class="ex">{{Extra}}</div>
+<div class="com">{{hint:Comment}}</div>
+<br><ans>{{Back}}</ans>
+{{#Tags}}<div id="tags">{{Tags}}</div>{{/Tags}}
+<br><info></info><log></log>
+<!-- Add Reverse-->
+
+<script> 
+
+//logger
+var baseLogFunction=console.log;function createLogNode(o){var e=document.createElement("div"),n=document.createTextNode(o);return e.appendChild(n),e}console.log=function(){baseLogFunction.apply(console,arguments);for(var o=Array.prototype.slice.call(arguments),e=0;e<o.length;e++){var n=createLogNode(o[e]);document.querySelector("log").appendChild(n)}},window.onerror=function(o,e,n){console.log("JavaScript error: "+o+" on line "+n+" for "+e)};
+
+var UA = navigator.userAgent;
+var isMobile = /Android/i.test(UA);
+var isAndroidWebview = /wv/i.test(UA)
+if (isMobile && isAndroidWebview) {
+s = 'Interval: ' + AnkiDroidJS.ankiGetCardInterval() + 'd; '
+s += 'Ease: ' +   AnkiDroidJS.ankiGetCardFactor()/10 + '%; '
+s += 'Reviews: ' +     AnkiDroidJS.ankiGetCardReps() + '; '
+s += 'Lapses: ' +   AnkiDroidJS.ankiGetCardLapses() + '; '
+document.querySelector('info').innerHTML += s
+}
+
+//tags
+tags = document.querySelector("#tags")
+if (tags){
+  parts = []
+  tags.innerHTML.split(' ').forEach(el => {
+    parts.push(`<span>${el}</span>`) 
+  })
+  tags.innerHTML = parts.join('')
+}
+
+//replacing tags <u> with <x>
+html = document.querySelector(".ex").innerHTML
+if (html) document.querySelector(".ex").innerHTML = html.replace(/u>/g, 'x>')
+
+//dividing
+answer = document.querySelector("ans")
+parts = []
+answer.innerHTML.split(/ |(<br>)/).forEach(el => {
+  if (el) parts.push(el === '<br>' ? '<br>' : ` <x>${el}</x>`) 
+})
+answer.innerHTML = parts.join('')
+
+//appearing by touch
+document.querySelectorAll("ans x").forEach(el=>{
+  el.count = 0
+  el.style.filter = "blur(0px)"
+  el.style.textDecoration = "none"
+  letters = ''
+  // document.querySelector('log').textContent += el.innerText + '|'
+  el.innerText.split('')
+    .forEach(x => letters += `<y>${x}</y>`)
+  el.innerHTML = letters
+  el.querySelectorAll("y").forEach(y => {
+    if (!y.textContent.match(/[.,:;!? -()/]/)){
+      y.className = 'blur'
+    }
+  })
+  el.addEventListener('click', ()=>{
+    if (el.count < el.textContent.length){
+      ely = el.querySelectorAll("y")[el.count]
+      ely.className = 'noblur'
+    }
+    el.count++
+  })
+})
+
+
+</script>
