@@ -1,3 +1,28 @@
+#tp{
+text-align: left;
+}
+.typeMissed, .typeBad, .typeGood{
+font-family: Consolas, Segoe UI;
+}
+#tp input{
+border: solid 1px #d4d4d4;
+border-radius: .15rem;
+text-align: center;
+font-family: Consolas, Segoe UI;
+}
+.typeGood {
+background-color: #fff;
+color: #000;
+}
+.typeBad {
+background-color: #fff;
+color: #f00;
+}
+.typeMissed {
+background-color: #fff;
+color: #00b050;
+}
+
 body {
 overflow: hidden; /* Hide scrollbars */
 }
