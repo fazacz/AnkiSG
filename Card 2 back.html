@@ -7,7 +7,7 @@
 <br>
 <div id="front">
 <tts service="android" voice="en_EN">{{Front}}</tts>
-</div><div id="tp">{{type:Front}}</div><br>
+</div><div id="tp" style="display: none">{{type:Front}}</div><br>
 {{#Tags}}<div id="tags">{{Tags}}</div>{{/Tags}}
 <br><audio id = "audio" src="" autoplay></audio>
 <div id="btns">
@@ -88,7 +88,9 @@ document.addEventListener('selectionchange', () => {
 h=dqs("#tp").innerHTML
 // dqs("log").innerText=h
 h=h.replace('<br><span id="typearrow">↓</span>', '')
-  .replace(/<div><code id="typeans">[\w\.\,\-\ ]+<\/code><\/div>/, '<div></div>')
-  .replace(/<div><code id="typeans"><br><span class="typeMissed">[\w\.\,\-\ ]+<\/span><\/code><\/div>/, '<div></div>')
+  .replace(/<div><code id="typeans">[^<>]+<\/code><\/div>/, '<div></div>')  // mobile
+  .replace(/<div><code id="typeans"><br><span class="typeMissed">[^<>]+<\/span><\/code><\/div>/, '<div></div>')  // desktop
+  .replace(/^<br>[^<>]+$/,'')  // mobile-web
 dqs('#tp').innerHTML=h
+dqs('#tp').style.display = 'block'
 </script>
