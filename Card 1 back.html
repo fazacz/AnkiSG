@@ -89,7 +89,7 @@ h=dqs("#tp").innerHTML
 // dqs("log").innerText=h
 h=h.replace('<br><span id="typearrow">↓</span>', '')
   .replace(/<div><code id="typeans">[^<>]+<\/code><\/div>/, '<div></div>')  // mobile
-  .replace(/<div><code id="typeans"><br><span class="typeMissed">[^<>]+<\/span><\/code><\/div>/, '<div></div>')  // desktop
+  .replace(/<div><code id="typeans">(<br>)?<span class="typeMissed">[^<>]+<\/span><\/code><\/div>/, '<div></div>')  // ((<br>)? mobile) desktop
   .replace(/^<br>[^<>]+$/,'')  // mobile-web
 dqs('#tp').innerHTML=h
 dqs('#tp').style.display = 'block'
